@@ -11,6 +11,7 @@
         @yield('content')
     </main>
     @include('layout.scirpt')
-
+    
+    @yield('scripts')
 </body>
 </html>

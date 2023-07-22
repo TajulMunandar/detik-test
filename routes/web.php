@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\bukuController;
+use App\Http\Controllers\kategoriController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,13 +14,12 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/', [bukuController::class, 'index'])->name('buku');
+Route::get('/', [bukuController::class, 'index'])->name('buku.index');
+Route::post('/', [bukuController::class, 'store'])->name('buku.store');
+Route::put('/{id}', [bukuController::class, 'update'])->name('buku.update');
+Route::delete('/{id}', [bukuController::class, 'destroy'])->name('buku.destroy');
 
-Route::get('/kategori', function () {
-    return view('dashboardPage.kategori',[
-        'page' => "Kategori"
-    ]);
-});
+Route::resource('/kategori', kategoriController::class);
 
 Route::get('/user', function () {
     return view('dashboardPage.user',[

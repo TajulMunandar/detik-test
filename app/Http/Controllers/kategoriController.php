@@ -11,7 +11,9 @@ class kategoriController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboardPage.kategori',[
+            'page' => "Kategori"
+        ]);
     }
 
     /**

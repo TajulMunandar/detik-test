@@ -85,6 +85,122 @@
                                         </td>
                                     </tr>
 
+                                    {{--  MODAL EDIT  --}}
+                                    <div class="modal fade" id="editModal{{ $loop->iteration }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Tambah Data Buku</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ route('buku.update', $buku->id) }}" method="POST"
+                                                    enctype="multipart/form-data">
+                                                    @method('PUT')
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <input type="hidden" name="oldFile" value="{{ $buku->file }}">
+                                                            <input type="hidden" name="oldThumnail" value="{{ $buku->thumnail }}">
+                                                            <div class="mb-3">
+                                                                <label for="judul" class="form-label">Judul</label>
+                                                                <input type="text"
+                                                                    class="form-control @error('judul') is-invalid @enderror"
+                                                                    name="judul" id="judul"
+                                                                    value="{{ old('judul', $buku->judul) }}"
+                                                                    placeholder="Anton" autofocus required>
+                                                                @error('judul')
+                                                                    <div class="invalid-feedback">
+                                                                        {{-- {{ $message }} --}}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="kategoriId" class="form-label">Kategori</label>
+                                                                <select
+                                                                    class="form-select @error('kategoriId') is-invalid @enderror"
+                                                                    aria-label="Default select example" name="kategoriId">
+                                                                    <option selected>Pilih Kategori</option>
+                                                                    @foreach ($kategoris as $kategori)
+                                                                        <option value="{{ $kategori->id }}">
+                                                                            {{ $kategori->name }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                                @error('name')
+                                                                    <div class="invalid-feedback">
+                                                                        {{-- {{ $message }} --}}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="deskripsi" class="form-label">Deskripsi</label>
+                                                                <input type="text"
+                                                                    class="form-control @error('deskripsi') is-invalid @enderror"
+                                                                    name="deskripsi" id="deskripsi"
+                                                                    value="{{ old('deskripsi', $buku->deskripsi) }}"
+                                                                    placeholder="Anton" autofocus required>
+                                                                @error('deskripsi')
+                                                                    <div class="invalid-feedback">
+                                                                        {{-- {{ $message }} --}}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="jumlah" class="form-label">Jumlah</label>
+                                                                <input type="text"
+                                                                    class="form-control @error('jumlah') is-invalid @enderror"
+                                                                    name="jumlah" id="jumlah"
+                                                                    value="{{ old('jumlah', $buku->jumlah) }}"
+                                                                    placeholder="Anton" autofocus required>
+                                                                @error('jumlah')
+                                                                    <div class="invalid-feedback">
+                                                                        {{-- {{ $message }} --}}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="formFile" class="form-label">Upload
+                                                                    Buku</label>
+                                                                <input
+                                                                    class="form-control @error('file') is-invalid @enderror"
+                                                                    type="file" name="file" id="formFile">
+                                                                @error('file')
+                                                                    <div class="invalid-feedback">
+                                                                        {{-- {{ $message }} --}}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="thumnail" class="form-label">Upload
+                                                                    Thumbnail</label>
+                                                                <img src="{{ asset('storage/' . $buku->thumnail) }}"
+                                                                    class="img-preview img-fluid mb-3 col-sm-5 d-block">
+                                                                <img class="img-preview img-fluid mb-3 col-sm-5">
+                                                                <input
+                                                                    class="form-control @error('thumnail') is-invalid @enderror"
+                                                                    type="file" name="thumnail" id="thumnail"
+                                                                    onchange="previewImage()">
+                                                                @error('thumnail')
+                                                                    <div class="invalid-feedback">
+                                                                        {{-- {{ $message }} --}}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary">Save
+                                                            changes</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{--  MODAL EDIT  --}}
+
                                     {{--  MODAL Delete  --}}
                                     <div class="modal fade" id="hapusModal{{ $loop->iteration }}" tabindex="-1"
                                         aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -95,16 +211,20 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <form action="" method="POST" enctype="multipart/form-data">
+                                                <form action="{{ route('buku.destroy', $buku->id) }}" method="POST"
+                                                    enctype="multipart/form-data">
+                                                    @method('DELETE')
                                                     @csrf
                                                     <div class="modal-body">
-                                                        <p>Apakah Anda Yakin Ingin Menghapus Data <b>{{ $buku->judul }}</b> ini?</p>
+                                                        <p>Apakah Anda Yakin Ingin Menghapus Data
+                                                            <b>{{ $buku->judul }}</b> ini?
+                                                        </p>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"
                                                             data-bs-dismiss="modal">Close</button>
                                                         <button type="submit" class="btn btn-danger">hapus
-                                                            </button>
+                                                        </button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -129,24 +249,24 @@
                         <h5 class="modal-title" id="exampleModalLabel">Tambah Data Buku</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('buku.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="modal-body">
                             <div class="row">
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Judul</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        name="name" id="name" placeholder="Anton" autofocus required>
-                                    @error('name')
+                                    <label for="judul" class="form-label">Judul</label>
+                                    <input type="text" class="form-control @error('judul') is-invalid @enderror"
+                                        name="judul" id="judul" placeholder="Anton" autofocus required>
+                                    @error('judul')
                                         <div class="invalid-feedback">
                                             {{-- {{ $message }} --}}
                                         </div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Kategori</label>
-                                    <select class="form-select @error('name') is-invalid @enderror"
-                                        aria-label="Default select example">
+                                    <label for="kategoriId" class="form-label">Kategori</label>
+                                    <select class="form-select @error('kategoriId') is-invalid @enderror"
+                                        aria-label="Default select example" name="kategoriId">
                                         <option selected>Pilih Kategori</option>
                                         @foreach ($kategoris as $kategori)
                                             <option value="{{ $kategori->id }}">{{ $kategori->name }}</option>
@@ -159,20 +279,20 @@
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Deskripsi</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        name="name" id="name" placeholder="Anton" autofocus required>
-                                    @error('name')
+                                    <label for="deskripsi" class="form-label">Deskripsi</label>
+                                    <input type="text" class="form-control @error('deskripsi') is-invalid @enderror"
+                                        name="deskripsi" id="deskripsi" placeholder="Anton" autofocus required>
+                                    @error('deskripsi')
                                         <div class="invalid-feedback">
                                             {{-- {{ $message }} --}}
                                         </div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Jumlah</label>
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                        name="name" id="name" placeholder="Anton" autofocus required>
-                                    @error('name')
+                                    <label for="jumlah" class="form-label">Jumlah</label>
+                                    <input type="text" class="form-control @error('jumlah') is-invalid @enderror"
+                                        name="jumlah" id="jumlah" placeholder="Anton" autofocus required>
+                                    @error('jumlah')
                                         <div class="invalid-feedback">
                                             {{-- {{ $message }} --}}
                                         </div>
@@ -180,19 +300,20 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="formFile" class="form-label">Upload Buku</label>
-                                    <input class="form-control @error('name') is-invalid @enderror" type="file"
-                                        id="formFile">
-                                    @error('name')
+                                    <input class="form-control @error('file') is-invalid @enderror" type="file"
+                                        name="file" id="formFile">
+                                    @error('file')
                                         <div class="invalid-feedback">
                                             {{-- {{ $message }} --}}
                                         </div>
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="formFile" class="form-label">Upload Thumbnail</label>
-                                    <input class="form-control @error('name') is-invalid @enderror" type="file"
-                                        id="formFile">
-                                    @error('name')
+                                    <label for="thumnail" class="form-label">Upload Thumbnail</label>
+                                    <img class="img-preview img-fluid mb-3 col-sm-5">
+                                    <input class="form-control @error('thumnail') is-invalid @enderror" type="file"
+                                        name="thumnail" id="thumnail" onchange="previewImage()">
+                                    @error('thumnail')
                                         <div class="invalid-feedback">
                                             {{-- {{ $message }} --}}
                                         </div>
@@ -211,4 +332,36 @@
         {{--  MODAL ADD  --}}
 
     </div>
+
+@section('scripts')
+    <script>
+        function previewImage() {
+            const image = document.querySelector('#thumnail');
+            const imgPreview = document.querySelector('.img-preview');
+
+            imgPreview.style.display = 'block';
+
+            const oFReader = new FileReader();
+            oFReader.readAsDataURL(image.files[0]);
+
+            oFReader.onload = function(OFREvent) {
+                imgPreview.src = OFREvent.target.result;
+            }
+
+            //batas
+
+            const image1 = document.querySelector('#thumnail1');
+            const imgPreview1 = document.querySelector('.img-preview1');
+
+            imgPreview1.style.display = 'block';
+
+            const oFReader1 = new FileReader();
+            oFReader1.readAsDataURL(image1.files[0]);
+
+            oFReader1.onload = function(OFREvent) {
+                imgPreview1.src = OFREvent.target.result;
+            }
+        }
+    </script>
+@endsection
 @endsection
