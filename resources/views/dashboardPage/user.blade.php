@@ -42,28 +42,185 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Name</th>
-                                    <th>Slug</th>
+                                    <th>Username</th>
+                                    <th>Role</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($users as $user)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->username }}</td>
+                                        <td>
+                                            @if ($user->isAdmin == 1)
+                                                Admin
+                                            @else
+                                                User
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-dark" data-bs-toggle="modal"
+                                                data-bs-target="#pswdModal{{ $loop->iteration }}">
+                                                <i class="fa-solid fa-lock"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                                data-bs-target="#editModal{{ $loop->iteration }}">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </button>
+                                            <button id="delete-button" class="btn btn-danger" id="delete-button"
+                                                data-bs-toggle="modal" data-bs-target="#hapusModal{{ $loop->iteration }}">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
 
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                            data-bs-target="#editModal">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </button>
-                                        <button id="delete-button" class="btn btn-danger" id="delete-button"
-                                            data-bs-toggle="modal" data-bs-target="#hapusModal">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
+                                    {{--  MODAL Delete  --}}
+                                    <div class="modal fade" id="hapusModal{{ $loop->iteration }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Hapus Data User</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <form action="" method="POST" enctype="multipart/form-data">
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        <p>Apakah Anda Yakin Ingin Menghapus Data <b>{{ $user->name }}</b>
+                                                            ini?</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-danger">hapus
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{--  MODAL Delete  --}}
 
+                                    {{-- Modal Edit --}}
+                                    <div class="modal fade" id="editModal{{ $loop->iteration }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Edit Data User</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <form action="" method="POST" enctype="multipart/form-data">
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="mb-3">
+                                                                <label for="name" class="form-label">Nama</label>
+                                                                <input type="text"
+                                                                    class="form-control @error('name') is-invalid @enderror"
+                                                                    name="name" id="name" placeholder="Anton" value="{{ old('name', $user->name) }}"
+                                                                    autofocus required>
+                                                                @error('name')
+                                                                    <div class="invalid-feedback">
+                                                                        {{-- {{ $message }} --}}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="username" class="form-label">Username</label>
+                                                                <input type="text"
+                                                                    class="form-control @error('username') is-invalid @enderror"
+                                                                    name="username" id="username" placeholder="anton" value="{{ old('username', $user->username) }}"
+                                                                    autofocus required>
+                                                                @error('username')
+                                                                    <div class="invalid-feedback">
+                                                                        {{-- {{ $message }} --}}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="password" class="form-label">Role</label>
+                                                                <select
+                                                                    class="form-select @error('name') is-invalid @enderror"
+                                                                    aria-label="Default select example">
+                                                                    <option selected>Pilih Role</option>
+                                                                    <option value="1">Admin</option>
+                                                                    <option value="0">User</option>
+                                                                </select>
+                                                                @error('name')
+                                                                    <div class="invalid-feedback">
+                                                                        {{-- {{ $message }} --}}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-warning">Perbarui</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- Modal Edit --}}
+
+                                    {{-- Modal Edit Password --}}
+                                    <div class="modal fade" id="pswdModal{{ $loop->iteration }}" tabindex="-1"
+                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Ubah Password User</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <form action="" method="POST" enctype="multipart/form-data">
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="mb-3">
+                                                                <label for="password" class="form-label">Password Baru</label>
+                                                                <input type="text"
+                                                                    class="form-control @error('password') is-invalid @enderror"
+                                                                    name="password" id="password"
+                                                                    autofocus required>
+                                                                @error('password')
+                                                                    <div class="invalid-feedback">
+                                                                        {{-- {{ $message }} --}}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="password2" class="form-label">Konfirmasi Password</label>
+                                                                <input type="text"
+                                                                    class="form-control @error('password2') is-invalid @enderror"
+                                                                    name="password2" id="password2"
+                                                                    autofocus required>
+                                                                @error('password2')
+                                                                    <div class="invalid-feedback">
+                                                                        {{-- {{ $message }} --}}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-dark">Perbarui</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- Modal Edit Password --}}
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -77,7 +234,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Tambah Data Category</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="" method="POST" enctype="multipart/form-data">
@@ -94,11 +251,45 @@
                                         </div>
                                     @enderror
                                 </div>
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control @error('username') is-invalid @enderror"
+                                        name="username" id="username" placeholder="anton" autofocus required>
+                                    @error('username')
+                                        <div class="invalid-feedback">
+                                            {{-- {{ $message }} --}}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                        name="password" id="password" placeholder="anton" autofocus required>
+                                    @error('password')
+                                        <div class="invalid-feedback">
+                                            {{-- {{ $message }} --}}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Role</label>
+                                    <select class="form-select @error('name') is-invalid @enderror"
+                                        aria-label="Default select example">
+                                        <option selected>Pilih Role</option>
+                                        <option value="1">Admin</option>
+                                        <option value="0">User</option>
+                                    </select>
+                                    @error('name')
+                                        <div class="invalid-feedback">
+                                            {{-- {{ $message }} --}}
+                                        </div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            <button type="submit" class="btn btn-primary">Tambah</button>
                         </div>
                     </form>
                 </div>
