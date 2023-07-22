@@ -31,7 +31,13 @@ class kategoriController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+        ]);
+
+        kategori::create($validatedData);
+
+        return redirect('/kategori')->with('success', 'Kategori berhasil dibuat');
     }
 
     /**
@@ -55,7 +61,14 @@ class kategoriController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $rules = [
+            'name' => 'required|max:255',
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        kategori::where('id', $id)->update($validatedData);
+        return redirect('/kategori')->with('success', 'Kategori berhasil diubah');
     }
 
     /**
@@ -63,6 +76,8 @@ class kategoriController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $kategori = kategori::whereId($id)->first();
+        kategori::destroy($id);
+        return redirect('/kategori')->with('success', "Kategori $kategori->name berhasil dihapus!");
     }
 }

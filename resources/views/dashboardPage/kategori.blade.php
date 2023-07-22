@@ -72,8 +72,10 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <form action="" method="POST" enctype="multipart/form-data">
+                                                <form action="{{ route('kategori.destroy', $kategori->id) }}" method="POST" enctype="multipart/form-data">
+                                                    @method('PUT')
                                                     @csrf
+                                                    <input type="hidden" name="_method" value="DELETE">
                                                     <div class="modal-body">
                                                         <p>Apakah Anda Yakin Ingin Menghapus Data <b>{{ $kategori->name }}</b>
                                                             ini?</p>
@@ -100,7 +102,8 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <form action="" method="POST" enctype="multipart/form-data">
+                                                <form action="{{ route('kategori.update', $kategori->id) }}" method="POST" enctype="multipart/form-data">
+                                                    @method('PUT')
                                                     @csrf
                                                     <div class="modal-body">
                                                         <div class="row">
