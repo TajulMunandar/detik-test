@@ -86,7 +86,8 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <form action="" method="POST" enctype="multipart/form-data">
+                                                <form action="{{ route('user.destroy', $user->id) }}" method="post" enctype="multipart/form-data">
+                                                    @method('delete')
                                                     @csrf
                                                     <div class="modal-body">
                                                         <p>Apakah Anda Yakin Ingin Menghapus Data <b>{{ $user->name }}</b>
@@ -114,7 +115,8 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <form action="" method="POST" enctype="multipart/form-data">
+                                                <form action="{{ route('user.update', $user->id) }}" method="POST" enctype="multipart/form-data">
+                                                    @method('put')
                                                     @csrf
                                                     <div class="modal-body">
                                                         <div class="row">
@@ -126,7 +128,7 @@
                                                                     autofocus required>
                                                                 @error('name')
                                                                     <div class="invalid-feedback">
-                                                                        {{-- {{ $message }} --}}
+                                                                        {{ $message }}
                                                                     </div>
                                                                 @enderror
                                                             </div>
@@ -138,22 +140,19 @@
                                                                     autofocus required>
                                                                 @error('username')
                                                                     <div class="invalid-feedback">
-                                                                        {{-- {{ $message }} --}}
+                                                                        {{ $message }}
                                                                     </div>
                                                                 @enderror
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="password" class="form-label">Role</label>
-                                                                <select
-                                                                    class="form-select @error('name') is-invalid @enderror"
-                                                                    aria-label="Default select example">
-                                                                    <option selected>Pilih Role</option>
-                                                                    <option value="1">Admin</option>
-                                                                    <option value="0">User</option>
+                                                                <label for="isAdmin" class="form-label">Role</label>
+                                                                <select class="form-select @error('isAdmin') is-invalid @enderror" aria-label="Default select example" name="isAdmin">
+                                                                    <option value="1" @if(old('isAdmin', $user->isAdmin) == 1) selected @endif>Admin</option>
+                                                                    <option value="0" @if(old('isAdmin', $user->isAdmin) == 0) selected @endif>User</option>
                                                                 </select>
-                                                                @error('name')
+                                                                @error('isAdmin')
                                                                     <div class="invalid-feedback">
-                                                                        {{-- {{ $message }} --}}
+                                                                        {{ $message }}
                                                                     </div>
                                                                 @enderror
                                                             </div>
@@ -180,11 +179,12 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <form action="" method="POST" enctype="multipart/form-data">
+                                                <form action="{{ route('user.password') }}" method="POST" enctype="multipart/form-data">
                                                     @csrf
                                                     <div class="modal-body">
                                                         <div class="row">
                                                             <div class="mb-3">
+                                                                <input type="hidden" name="id" id="">
                                                                 <label for="password" class="form-label">Password Baru</label>
                                                                 <input type="text"
                                                                     class="form-control @error('password') is-invalid @enderror"
@@ -192,7 +192,7 @@
                                                                     autofocus required>
                                                                 @error('password')
                                                                     <div class="invalid-feedback">
-                                                                        {{-- {{ $message }} --}}
+                                                                        {{ $message }}
                                                                     </div>
                                                                 @enderror
                                                             </div>
@@ -204,7 +204,7 @@
                                                                     autofocus required>
                                                                 @error('password2')
                                                                     <div class="invalid-feedback">
-                                                                        {{-- {{ $message }} --}}
+                                                                        {{ $message }}
                                                                     </div>
                                                                 @enderror
                                                             </div>
@@ -237,7 +237,7 @@
                         <h5 class="modal-title" id="exampleModalLabel">Tambah Data User</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="modal-body">
                             <div class="row">
@@ -272,14 +272,14 @@
                                     @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <label for="password" class="form-label">Role</label>
+                                    <label for="isAdmin" class="form-label">Role</label>
                                     <select class="form-select @error('name') is-invalid @enderror"
-                                        aria-label="Default select example">
+                                        aria-label="Default select example" name="isAdmin">
                                         <option selected>Pilih Role</option>
                                         <option value="1">Admin</option>
                                         <option value="0">User</option>
                                     </select>
-                                    @error('name')
+                                    @error('isAdmin')
                                         <div class="invalid-feedback">
                                             {{-- {{ $message }} --}}
                                         </div>

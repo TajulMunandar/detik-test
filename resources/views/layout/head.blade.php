@@ -19,6 +19,9 @@
 <!-- Datatables Style -->
 <link rel="stylesheet" href="{{ asset('assets/DataTables/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/DataTables/dataTables.bootstrap5.min.css') }}">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.4.2/css/searchBuilder.dataTables.min.css">
+
 
 
 <!-- CSS Files -->

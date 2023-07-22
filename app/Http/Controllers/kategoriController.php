@@ -76,8 +76,15 @@ class kategoriController extends Controller
      */
     public function destroy(string $id)
     {
-        $kategori = kategori::whereId($id)->first();
-        kategori::destroy($id);
+        try {
+            $kategori = kategori::whereId($id)->first();
+            kategori::destroy($id);
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() == 23000) {
+                //SQLSTATE[23000]: Integrity constraint violation
+                return redirect()->route('kategori.index')->with('failed', "Kategori $kategori->nama tidak dapat dihapus, karena sedang digunakan pada tabel lain!");
+            }
+        }
         return redirect('/kategori')->with('success', "Kategori $kategori->name berhasil dihapus!");
     }
 }

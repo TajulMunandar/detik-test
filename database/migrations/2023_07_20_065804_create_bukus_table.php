@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('judul');
             $table->foreignId('kategoriId')->constrained('kategoris')->onUpdate('cascade')->onDelete('restrict');
+            $table->foreignId('userId')->constrained('users')->onUpdate('cascade')->onDelete('restrict');
             $table->text('deskripsi');
             $table->integer('jumlah');
             $table->text('file');

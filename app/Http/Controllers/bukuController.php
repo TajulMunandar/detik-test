@@ -12,13 +12,32 @@ class bukuController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $kategoris = kategori::all();
-        $bukus = buku::with('kategoris')->get();
-        return view('dashboardPage.buku', [
-            'page' => 'Buku'
-        ])->with(compact('kategoris', 'bukus'));
+        // Check if a specific category is selected
+    $kategoriId = $request->input('kategoriFilter');
+    $query = buku::query();
+
+    if (auth()->user()->isAdmin == 1) {
+        // If the user is an admin, get all books or filter by selected category
+        if (!empty($kategoriId)) {
+            $query->where('kategoriId', $kategoriId);
+        }
+        $bukus = $query->with('kategoris')->get();
+    } else {
+        // If the user is not an admin, get books filtered by user ID and selected category
+        $query->where('userId', auth()->user()->id);
+        if (!empty($kategoriId)) {
+            $query->where('kategoriId', $kategoriId);
+        }
+        $bukus = $query->with('kategoris')->get();
+    }
+
+    $kategoris = kategori::all();
+
+    return view('dashboardPage.buku', [
+        'page' => 'Buku'
+    ])->with(compact('kategoris', 'bukus'));
     }
 
     /**
@@ -39,8 +58,11 @@ class bukuController extends Controller
             'kategoriId' => 'required',
             'deskripsi' => 'required',
             'jumlah' => 'required',
-            'thumnail' => 'required|image|file'
+            'file' => 'required|mimes:pdf',
+            'thumnail' => 'required|image|mimes:jpeg,jpg,png'
         ]);
+
+        $validatedData['userId'] = auth()->user()->id;
 
         if ($request->file('thumnail')) {
             $validatedData['thumnail'] = $request->file('thumnail')->store('thumnail-buku');
@@ -111,10 +133,10 @@ class bukuController extends Controller
     public function destroy(string $id)
     {
         $buku = buku::whereId($id)->first();
-        if($buku->thumnail){
+        if ($buku->thumnail) {
             Storage::delete($buku->thumnail);
         }
-        if($buku->file){
+        if ($buku->file) {
             Storage::delete($buku->file);
         }
         buku::destroy($id);
